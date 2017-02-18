@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {
+  BackAndroid,
   Button,
   Image,
   ListView,
@@ -10,91 +11,64 @@ import {
   View,
 } from 'react-native'
 
+import Menu from './menu'
+import Cats from './cats'
+
 const routes = [
-  {title: 'Welcome', index: 0},
-  {title: 'Menu', index: 1}
+  {title: 'Stress Relief', id: 'menu'},
+  {title: 'Cats', id: 'cats'},
+  {title: 'Minigames', id: 'minigames'},
+  {title: 'Memes', id: 'memes'},
 ]
 
-class ModuleMenu extends Component {
-  constructor() {
-    super()
-    this.state = {
-      dataSource: new ListView.DataSource({
-        rowHasChanged: (r1, r2) => r1 !== r2
-      }).cloneWithRows([
-        'minigames',
-        'cats',
-        'memes',
-        'smell the flowers'
-      ]),
-    }
-  }
-
-  render() {
-    return (
-      <View style={{padding: 10}}>
-        <ListView
-          dataSource={this.state.dataSource}
-          renderRow={(data, section, row, highlight) =>
-            <TouchableHighlight
-              underlayColor='#dddddd'
-              onPress={() => {
-                highlight(section, row)
-              }}
-            >
-              <Text style={{fontSize: 40}}>{data}</Text>
-            </TouchableHighlight>
-          }
-          renderSeparator={(section, row, adjacentRowHighlighted) =>
-            <View
-              key={`${section}-${row}`}
-              style={{
-                height: 1,
-                backgroundColor: '#ccc'
-              }}
-              />
-          }
-        />
-      </View>
-    )
-  }
-}
-
-class WelcomeView extends Component {
-  render() {
-    return (
-      <TouchableHighlight
-        onPress={() => this.props.nav.push(routes[1])}>
-        <Text style={{
-          fontSize: 60,
-          color: 'white',
-          textAlign: 'center',
-          marginTop: 40,
-        }}>
-          Welcome
-        </Text>
-      </TouchableHighlight>
-    )
-  }
-}
-
 export default class Main extends Component {
+  componentDidMount() {
+    // BackAndroid.addEventListener('hardwareBackPress', function() {
+    //   if (this.navigator.getCurrentRoutes().length > 1) {
+    //     this.navigator.pop();
+    //   }
+    // });
+  }
+
   render() {
     return (
-      <Image
-        style={{flex: 1}}
-        source={{uri: 'http://www.resortcollection.com/wp-content/themes/resortcollection/property-images/summit/summit-beach-resort-panama-city-beach-fl-beach-01.jpg'}}>
-        <Navigator
-          initialRoute={routes[0]}
-          initialRouteStack={routes}
-          renderScene={(route, navigator) => {
-            if (route.index == 0)
-              return <WelcomeView nav={navigator} />
-            else if (route.index == 1)
-              return <ModuleMenu nav={navigator} />
-          }}
-        />
-      </Image>
+      <Navigator
+        ref={nav => this.navigator = nav}
+        initialRoute={routes[0]}
+        initialRouteStack={routes}
+        renderScene={(route, navigator) => {
+          let back = null;
+          if (navigator.getCurrentRoutes().length > 1) {
+            back =
+              <TouchableHighlight onPress={() => navigator.pop()}>
+                <Text style={{fontSize: 30, marginRight: 10}}>◁</Text>
+              </TouchableHighlight>
+          }
+          return (
+            <View>
+              {/* headerbar */}
+              <View style={{
+                padding: 10,
+                backgroundColor: '#00d8ff',
+                flexDirection: 'row',
+                alignItems: 'center',
+              }}>
+                {back}
+                <Text style={{fontSize: 40}}>
+                  {route.title}
+                </Text>
+              </View>
+
+              {/* main view */}
+              {(function(){
+                if (route.id === 'menu') return <Menu navigator={navigator} routes={routes} style={{flex:1}}/>
+                else if (route.id === 'cats') return <Cats />
+                else return <Text>wtf no route</Text>
+              })()}
+            </View>
+          )
+        }}
+      />
     )
   }
 }

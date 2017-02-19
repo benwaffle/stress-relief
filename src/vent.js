@@ -17,7 +17,7 @@ export default class Vent extends Component {
     dataSource: new ListView.DataSource({
       rowHasChanged: (r1, r2) => r1 !== r2
     }),
-    text: ''
+    text: '',
   }
 
   constructor() {
@@ -43,23 +43,29 @@ export default class Vent extends Component {
   sendMessage(event) {
     const text = event.nativeEvent.text
     if (text) {
-      firebase.database().ref('messages').push(text)
+      firebase.database().ref('messages').push(`${this.props.name}: ${text}`)
     }
     this.setState({
       text: ''
     })
   }
 
+  componentDidUpdate() {
+    requestAnimationFrame(() =>
+      this._scrollView.scrollToEnd({animated: true}))
+  }
+
   render() {
     return (
-      <KeyboardAvoidingView style={{flex:1}} behavior='padding'>
+      <KeyboardAvoidingView style={{flex:1}}>
         <ListView
+          ref={component => this._scrollView = component}
           style={{flex: 1}}
           dataSource={this.state.dataSource}
           renderRow={(data) => {
             return (
               <View style={{paddingLeft: 10, paddingRight: 10, paddingTop: 10}}>
-                <Text style={{fontSize: 10}}>
+                <Text style={{fontSize: 20}}>
                   {data}
                 </Text>
               </View>
@@ -77,18 +83,24 @@ export default class Vent extends Component {
           }
           */
         />
-        <TextInput
-          style={{
-            flex: 0,
-            borderTopWidth: 1,
-            borderTopColor: '#eee'
-          }}
-          returnKeyType='send'
-          onSubmitEditing={::this.sendMessage}
-          onChangeText={(text) => this.setState({text})}
-          blurOnSubmit={false}
-          value={this.state.text}
-        />
+        <View style={{
+          flexDirection: 'row',
+          alignItems: 'center',
+          borderTopWidth: 1,
+          borderTopColor: '#eee',
+        }}>
+          <Text style={{fontSize: 20}}>{this.props.name + ':'}</Text>
+          <TextInput
+            style={{
+              flex: 1,
+            }}
+            returnKeyType='send'
+            onSubmitEditing={::this.sendMessage}
+            onChangeText={(text) => this.setState({text})}
+            blurOnSubmit={false}
+            value={this.state.text}
+          />
+        </View>
       </KeyboardAvoidingView>
     )
   }

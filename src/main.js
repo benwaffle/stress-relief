@@ -24,6 +24,8 @@ const routes = [
   {title: 'Vent', id: 'vent'},
 ]
 
+const chatName = require('node-random-name')({ first: true })
+
 export default class Main extends Component {
   installHandler(navigator) {
     if (!this.setup && Platform.OS === 'android') {
@@ -70,7 +72,7 @@ export default class Main extends Component {
               {(function(){
                 if (route.id === 'menu') return <Menu navigator={navigator} routes={routes} />
                 else if (route.id === 'cats') return <Cats />
-                else if (route.id === 'vent') return <Vent style={{flex: 1}} />
+                else if (route.id === 'vent') return <Vent style={{flex: 1}} name={chatName} />
                 else return <Text>wtf no route</Text>
               })()}
             </View>

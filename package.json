@@ -9,6 +9,7 @@
   "dependencies": {
     "babel-preset-stage-0": "^6.22.0",
     "firebase": "^3.6.9",
+    "node-random-name": "^1.0.1",
     "react": "~15.4.0",
     "react-native": "0.41.2",
     "react-native-fetch-blob": "^0.10.2",

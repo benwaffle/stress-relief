@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import {
   Button,
   KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -57,6 +58,8 @@ export default class Vent extends Component {
   }
 
   render() {
+    // Add padding to iOS
+    let padsize = Platform.OS === 'ios' ? 10 : 0
     return (
       <KeyboardAvoidingView style={{flex:1}}>
         <ListView
@@ -89,8 +92,10 @@ export default class Vent extends Component {
           alignItems: 'center',
           borderTopWidth: 1,
           borderTopColor: '#eee',
+          padding: padsize,
+          paddingLeft: 10,
         }}>
-          <Text style={{fontSize: 20}}>{this.props.name + ':'}</Text>
+          <Text style={{fontSize: 20, paddingRight: 10}}>{this.props.name + ':'}</Text>
           <TextInput
             style={{
               flex: 1,

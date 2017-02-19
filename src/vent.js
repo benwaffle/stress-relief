@@ -26,6 +26,7 @@ export default class Vent extends Component {
   }
 
   componentDidMount() {
+    this._scrollView.scrollToEnd({animated: false})
     firebase.database().ref('messages').on('child_added', (data) => {
       console.log(`new message! ${data.val()}`)
       this.messages.push(data.val())

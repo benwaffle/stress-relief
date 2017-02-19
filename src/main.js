@@ -49,13 +49,19 @@ export default class Main extends Component {
         initialRoute={routes[0]}
         initialRouteStack={routes}
         renderScene={(route, navigator) => {
-          let back = null;
-          if (route.id != 'menu') {
-            back =
-              <TouchableOpacity onPress={navigator.pop} style={{marginLeft: 10}}>
+          let back = route.id === 'menu' ? null :
+              <TouchableOpacity onPress={navigator.pop} style={{
+                position: 'absolute',
+                top: 35,
+                left: 35
+              }}>
                 <Icon name="arrow-left" size={30} />
               </TouchableOpacity>
-          }
+          let footer = route.id !== 'menu' ? null :
+              <Text style={{textAlign: 'center', marginBottom: 20}}>
+                Made with <Icon name='heart' color='hotpink' /> at VentureHacks <Text style={{color: 'red', fontWeight: 'bold'}}>Red</Text>
+              </Text>
+
           return (
             <View style={{flex: 1}}>
               {/* headerbar */}
@@ -64,20 +70,26 @@ export default class Main extends Component {
                 backgroundColor: '#00d8ff',
                 flexDirection: 'row',
                 alignItems: 'center',
+                height: 100,
               }}>
-                {back}
-                <Text style={{fontSize: 40, marginLeft: 10}}>
+                <Text style={{fontSize: 40, marginLeft: 10, textAlign: 'center', flex: 1}}>
                   {route.title}
                 </Text>
+                {back}
               </View>
 
-              {/* main view */}
-              {(function(){
-                if (route.id === 'menu') return <Menu navigator={navigator} routes={routes} />
-                else if (route.id === 'cats') return <Cats />
-                else if (route.id === 'vent') return <Vent style={{flex: 1}} name={chatName} />
-                else return <Text>wtf no route</Text>
-              })()}
+              <View style={{flex: 1}}>
+                {/* main view */}
+                {(function(){
+                  if (route.id === 'menu') return <Menu navigator={navigator} routes={routes} />
+                  else if (route.id === 'cats') return <Cats />
+                  else if (route.id === 'vent') return <Vent style={{flex: 1}} name={chatName} />
+                  else return <Text>wtf no route</Text>
+                })()}
+              </View>
+
+              {/* footer */}
+              {footer}
             </View>
           )
         }}

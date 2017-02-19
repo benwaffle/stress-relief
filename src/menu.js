@@ -34,7 +34,7 @@ export default class extends Component {
                 highlight(section, row)
                 this.pressRow(row)
               }}>
-              <Text style={{fontSize: 30, textAlign: 'center', marginTop: 20, marginBottom: 20}}>{data}</Text>
+              <Text style={{fontSize: 30, margin: 20}}>{data}</Text>
             </TouchableHighlight>
           }
           renderSeparator={(section, row, adjacentRowHighlighted) =>

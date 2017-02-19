@@ -41,6 +41,8 @@ export default class Main extends Component {
   }
 
   render() {
+    // Padsize gives top padding to leave room for the time and wifi elements at the top of Iphone.
+    let padsize = Platform.OS === 'ios' ? 20 : 0
     return (
       <Navigator
         ref={::this.installHandler}
@@ -58,6 +60,7 @@ export default class Main extends Component {
             <View style={{flex: 1}}>
               {/* headerbar */}
               <View style={{
+                paddingTop: padsize,
                 backgroundColor: '#00d8ff',
                 flexDirection: 'row',
                 alignItems: 'center',

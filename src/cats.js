@@ -21,8 +21,10 @@ export default class extends Component {
       .then(b64 => {
         Image.getSize(b64, (w, h) => {
           const win = Dimensions.get('window')
-          if (w < win.width)
+          if (w < win.width) {
             w = win.width
+            h = win.height * 0.5;
+          }
           if (this.mounted)
             this.setState({image: b64, width: w, height: h})
         })

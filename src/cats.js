@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Button, Image } from 'react-native'
+import { ScrollView, View, Button, Image, Dimensions } from 'react-native'
 import RNFetchBlob from 'react-native-fetch-blob'
 
 export default class extends Component {
@@ -19,23 +19,36 @@ export default class extends Component {
         return `data:${type};base64,${res.base64()}`
       })
       .then(b64 => {
-        this.setState({image: b64})
+        Image.getSize(b64, (w, h) => {
+          const win = Dimensions.get('window')
+          if (w < win.width)
+            w = win.width
+          this.setState({image: b64, width: w, height: h})
+        })
       })
+  }
+
+  componentDidMount() {
+    this.downloadImage() // download image on start up
   }
 
   render() {
     return (
-      <View>
-        <Image
-          style={{width: 500, height: 300}}
-          source={{uri: this.state.image}}
-        />
-        <Button
-          style={{fontSize: 20}}
-          onPress={() => this.downloadImage()}
-          title="Another one!"
-        />
-      </View>
+      <ScrollView style={{margin:20}}>
+        {(() => {
+          if (this.state.image) {
+            return <Image
+              style={{width: this.state.width, height: this.state.height}}
+              source={{uri: this.state.image}} />
+          }
+        })()}
+        <View style={{marginTop: 10}}>
+          <Button
+            onPress={() => this.downloadImage()}
+            title="Another one!"
+          />
+        </View>
+      </ScrollView>
     )
   }
 }

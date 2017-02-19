@@ -23,11 +23,11 @@ const routes = [
 
 export default class Main extends Component {
   componentDidMount() {
-    // BackAndroid.addEventListener('hardwareBackPress', function() {
-    //   if (this.navigator.getCurrentRoutes().length > 1) {
-    //     this.navigator.pop();
-    //   }
-    // });
+    BackAndroid.addEventListener('hardwareBackPress', function() {
+      if (this.navigator && this.navigator.getCurrentRoutes().length > 1) {
+        this.navigator.pop();
+      }
+    });
   }
 
   render() {
@@ -38,23 +38,21 @@ export default class Main extends Component {
         initialRouteStack={routes}
         renderScene={(route, navigator) => {
           let back = null;
-          if (navigator.getCurrentRoutes().length > 1) {
+          if (route.id != 'menu') {
             back =
-              <TouchableHighlight onPress={() => navigator.pop()}>
-                <Text style={{fontSize: 30, marginRight: 10}}>◁</Text>
+              <TouchableHighlight onPress={() => navigator.pop()} underlayColor='#d0d0d0'>
+                <Text style={{fontSize: 40, marginLeft: 10}}>◁</Text>
               </TouchableHighlight>
           }
           return (
             <View>
               {/* headerbar */}
               <View style={{
-                padding: 10,
                 backgroundColor: '#00d8ff',
                 flexDirection: 'row',
-                alignItems: 'center',
               }}>
                 {back}
-                <Text style={{fontSize: 40}}>
+                <Text style={{fontSize: 40, marginLeft: 10}}>
                   {route.title}
                 </Text>
               </View>

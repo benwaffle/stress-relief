@@ -5,6 +5,7 @@ import {
   Image,
   ListView,
   Navigator,
+  Platform,
   StyleSheet,
   Text,
   TouchableHighlight,
@@ -17,23 +18,28 @@ import Cats from './cats'
 const routes = [
   {title: 'Stress Relief', id: 'menu'},
   {title: 'Cats', id: 'cats'},
-  {title: 'Minigames', id: 'minigames'},
-  {title: 'Memes', id: 'memes'},
+  {title: 'Vent', id: 'chat'},
 ]
 
 export default class Main extends Component {
-  componentDidMount() {
-    BackAndroid.addEventListener('hardwareBackPress', function() {
-      if (this.navigator && this.navigator.getCurrentRoutes().length > 1) {
-        this.navigator.pop();
-      }
-    });
+  installHandler(navigator) {
+    if (!this.setup && Platform.OS === 'android') {
+      BackAndroid.addEventListener('hardwareBackPress', () => {
+        console.log(`len = ${navigator.getCurrentRoutes().length}`)
+        if (navigator.getCurrentRoutes().length > 1) {
+          navigator.pop()
+          return true
+        }
+        return false
+      })
+      this.setup = true
+    }
   }
 
   render() {
     return (
       <Navigator
-        ref={nav => this.navigator = nav}
+        ref={nav => this.installHandler(nav)}
         initialRoute={routes[0]}
         initialRouteStack={routes}
         renderScene={(route, navigator) => {

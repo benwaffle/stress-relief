@@ -5,9 +5,8 @@ export default class extends Component {
   constructor() {
     super()
     this.data = [
-      'minigames',
-      'cats',
-      'memes',
+      'Cats',
+      'Vent',
     ]
     this.state = {
       dataSource: new ListView.DataSource({
@@ -17,12 +16,10 @@ export default class extends Component {
   }
 
   pressRow(id) {
-    if (this.data[id] === 'cats')
+    if (this.data[id] === 'Cats')
       this.props.navigator.push(this.props.routes[1])
-    if (this.data[id] === 'minigames')
+    if (this.data[id] === 'Vent')
       this.props.navigator.push(this.props.routes[2])
-    if (this.data[id] === 'memes')
-      this.props.navigator.push(this.props.routes[3])
   }
 
   render() {

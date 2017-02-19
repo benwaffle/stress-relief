@@ -23,13 +23,19 @@ export default class extends Component {
           const win = Dimensions.get('window')
           if (w < win.width)
             w = win.width
-          this.setState({image: b64, width: w, height: h})
+          if (this.mounted)
+            this.setState({image: b64, width: w, height: h})
         })
       })
   }
 
   componentDidMount() {
+    this.mounted = true
     this.downloadImage() // download image on start up
+  }
+
+  componentWillUnmount() {
+    this.mounted = false
   }
 
   render() {

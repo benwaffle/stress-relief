@@ -8,24 +8,26 @@ import {
   Platform,
   StyleSheet,
   Text,
-  TouchableHighlight,
+  TouchableOpacity,
   View,
 } from 'react-native'
 
 import Menu from './menu'
 import Cats from './cats'
+import Vent from './vent'
+
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 const routes = [
   {title: 'Stress Relief', id: 'menu'},
   {title: 'Cats', id: 'cats'},
-  {title: 'Vent', id: 'chat'},
+  {title: 'Vent', id: 'vent'},
 ]
 
 export default class Main extends Component {
   installHandler(navigator) {
     if (!this.setup && Platform.OS === 'android') {
       BackAndroid.addEventListener('hardwareBackPress', () => {
-        console.log(`len = ${navigator.getCurrentRoutes().length}`)
         if (navigator.getCurrentRoutes().length > 1) {
           navigator.pop()
           return true
@@ -39,23 +41,24 @@ export default class Main extends Component {
   render() {
     return (
       <Navigator
-        ref={nav => this.installHandler(nav)}
+        ref={::this.installHandler}
         initialRoute={routes[0]}
         initialRouteStack={routes}
         renderScene={(route, navigator) => {
           let back = null;
           if (route.id != 'menu') {
             back =
-              <TouchableHighlight onPress={() => navigator.pop()} underlayColor='#d0d0d0'>
-                <Text style={{fontSize: 40, marginLeft: 10}}>◁</Text>
-              </TouchableHighlight>
+              <TouchableOpacity onPress={navigator.pop} style={{marginLeft: 10}}>
+                <Icon name="arrow-left" size={30} />
+              </TouchableOpacity>
           }
           return (
-            <View>
+            <View style={{flex: 1}}>
               {/* headerbar */}
               <View style={{
                 backgroundColor: '#00d8ff',
                 flexDirection: 'row',
+                alignItems: 'center',
               }}>
                 {back}
                 <Text style={{fontSize: 40, marginLeft: 10}}>
@@ -65,8 +68,9 @@ export default class Main extends Component {
 
               {/* main view */}
               {(function(){
-                if (route.id === 'menu') return <Menu navigator={navigator} routes={routes} style={{flex:1}}/>
+                if (route.id === 'menu') return <Menu navigator={navigator} routes={routes} />
                 else if (route.id === 'cats') return <Cats />
+                else if (route.id === 'vent') return <Vent style={{flex: 1}} />
                 else return <Text>wtf no route</Text>
               })()}
             </View>
